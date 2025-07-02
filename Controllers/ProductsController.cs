@@ -2,7 +2,9 @@ using KarhanoMarket.Models;
 using KarhanoMarket.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace KarhanoMarket.Controllers
@@ -39,6 +41,38 @@ namespace KarhanoMarket.Controllers
                 var products = await _companyRepository.GetCompanyProductsAsync(companyId);
                 return View(products);
             }
+        }
+
+        // GET: Products/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Products/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                var companyIdClaim = User.FindFirst("CompanyId")?.Value;
+                if (string.IsNullOrEmpty(companyIdClaim))
+                {
+                    ModelState.AddModelError(string.Empty, "Company ID is missing.");
+                    return View(product);
+                }
+
+                product.Id = Guid.NewGuid();
+                product.CompanyId = Guid.Parse(companyIdClaim);
+                product.CreatedAt = DateTime.UtcNow;
+
+                await _companyRepository.AddAsync(product);
+                await _companyRepository.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(product);
         }
     }
 }

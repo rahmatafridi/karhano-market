@@ -4,31 +4,36 @@
     ViewData["Title"] = "Companies";
 }
 
-@await Html.PartialAsync("_Navbar")
+<h1>Companies</h1>
 
-<div class="container mt-4">
-    <h2>Companies</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Active</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var company in Model)
-            {
-                <tr>
-                    <td>@company.Name</td>
-                    <td>@company.Email</td>
-                    <td>@company.Phone</td>
-                    <td>@company.Address</td>
-                    <td>@(company.IsActive ? "Yes" : "No")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Company</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var company in Model)
+{
+    <tr>
+        <td>@company.Name</td>
+        <td>@company.Email</td>
+        <td>@company.Phone</td>
+        <td>@company.Address</td>
+        <td>@company.Description</td>
+        <td>
+            <!-- Actions like Edit/Delete can be added here -->
+        </td>
+    </tr>
+}
+    </tbody>
+</table>
