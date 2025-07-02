@@ -4,46 +4,46 @@
     ViewData["Title"] = "Create Company";
 }
 
-<h1>Create Company</h1>
+<h1 class="mb-4">Create Company</h1>
 
 <form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="Name"></label>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="Email"></label>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="Phone"></label>
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
         <input asp-for="Phone" class="form-control" />
         <span asp-validation-for="Phone" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="Address"></label>
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label"></label>
         <input asp-for="Address" class="form-control" />
         <span asp-validation-for="Address" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="Description"></label>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
         <textarea asp-for="Description" class="form-control"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
-    <h3>Admin User Details</h3>
-    <div class="form-group">
-        <label for="adminFullName">Full Name</label>
+    <h3 class="mt-4 mb-3">Admin User Details</h3>
+    <div class="mb-3">
+        <label for="adminFullName" class="form-label">Full Name</label>
         <input type="text" name="adminFullName" class="form-control" required />
     </div>
-    <div class="form-group">
-        <label for="adminEmail">Email</label>
+    <div class="mb-3">
+        <label for="adminEmail" class="form-label">Email</label>
         <input type="email" name="adminEmail" class="form-control" required />
     </div>
-    <div class="form-group">
-        <label for="adminPassword">Password</label>
+    <div class="mb-3">
+        <label for="adminPassword" class="form-label">Password</label>
         <input type="password" name="adminPassword" class="form-control" required />
     </div>
 
