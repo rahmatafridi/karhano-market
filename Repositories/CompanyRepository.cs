@@ -13,21 +13,21 @@ namespace KarhanoMarket.Repositories
             _context = context;
         }
 
-        public async Task<Company?> GetCompanyWithUsersAsync(int companyId)
+        public async Task<Company?> GetCompanyWithUsersAsync(Guid companyId)
         {
             return await _context.Companies
                 .Include(c => c.Users)
                 .FirstOrDefaultAsync(c => c.Id == companyId);
         }
 
-        public async Task<Company?> GetCompanyWithProductsAsync(int companyId)
+        public async Task<Company?> GetCompanyWithProductsAsync(Guid companyId)
         {
             return await _context.Companies
                 .Include(c => c.Products)
                 .FirstOrDefaultAsync(c => c.Id == companyId);
         }
 
-        public async Task<Company?> GetCompanyByUserIdAsync(string userId)
+        public async Task<Company?> GetCompanyByUserIdAsync(Guid userId)
         {
             var user = await _context.Users.FindAsync(userId);
             if (user == null || !user.CompanyId.HasValue)
@@ -44,27 +44,27 @@ namespace KarhanoMarket.Repositories
                 .ToListAsync();
         }
 
-        public async Task<bool> IsUserInCompanyAsync(string userId, int companyId)
+        public async Task<bool> IsUserInCompanyAsync(Guid userId, Guid companyId)
         {
             var user = await _context.Users.FindAsync(userId);
             return user != null && user.CompanyId == companyId;
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetCompanyUsersAsync(int companyId)
+        public async Task<IEnumerable<ApplicationUser>> GetCompanyUsersAsync(Guid companyId)
         {
             return await _context.Users
                 .Where(u => u.CompanyId == companyId)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetCompanyProductsAsync(int companyId)
+        public async Task<IEnumerable<Product>> GetCompanyProductsAsync(Guid companyId)
         {
             return await _context.Products
                 .Where(p => p.CompanyId == companyId)
                 .ToListAsync();
         }
 
-        public async Task<bool> CanUserAccessCompanyAsync(string userId, int companyId)
+        public async Task<bool> CanUserAccessCompanyAsync(Guid userId, Guid companyId)
         {
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
@@ -76,7 +76,7 @@ namespace KarhanoMarket.Repositories
             return user.CompanyId == companyId;
         }
 
-        public async Task<Dictionary<int, int>> GetCompaniesUserCountAsync()
+        public async Task<Dictionary<Guid, int>> GetCompaniesUserCountAsync()
         {
             return await _context.Users
                 .Where(u => u.CompanyId != null)
@@ -85,7 +85,7 @@ namespace KarhanoMarket.Repositories
                 .ToDictionaryAsync(x => x.CompanyId, x => x.UserCount);
         }
 
-        public async Task<Dictionary<int, int>> GetCompaniesProductCountAsync()
+        public async Task<Dictionary<Guid, int>> GetCompaniesProductCountAsync()
         {
             return await _context.Products
                 .GroupBy(p => p.CompanyId)

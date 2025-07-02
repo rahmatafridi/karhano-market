@@ -1,6 +1,11 @@
 using KarhanoMarket.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace KarhanoMarket.Data
 {
@@ -47,18 +52,18 @@ namespace KarhanoMarket.Data
                 .HasIndex(u => u.CompanyId);
         }
 
-        private int? GetCurrentUserCompanyId()
+        private Guid? GetCurrentUserCompanyId()
         {
             // Get the current user from HttpContext
             var user = _httpContextAccessor.HttpContext?.User;
-            
+
             // If user is a SuperAdmin (has SuperAdmin role), return null to see all data
             if (user?.IsInRole("SuperAdmin") ?? false)
                 return null;
 
             // Otherwise, try to get CompanyId from claims
             var companyIdClaim = user?.FindFirst("CompanyId");
-            return companyIdClaim != null ? int.Parse(companyIdClaim.Value) : null;
+            return companyIdClaim != null ? Guid.Parse(companyIdClaim.Value) : (Guid?)null;
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -73,7 +78,7 @@ namespace KarhanoMarket.Data
                 if (entry.Entity is Product product)
                 {
                     product.UpdatedAt = DateTime.UtcNow;
-                    
+
                     // Set UpdatedById if we can get the current user
                     var userId = _httpContextAccessor.HttpContext?.User?.FindFirst("UserId")?.Value;
                     if (!string.IsNullOrEmpty(userId))

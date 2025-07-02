@@ -19,6 +19,11 @@ namespace KarhanoMarket.Repositories
             _logger = logger;
         }
 
+        public GenericRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public virtual async Task<T?> GetByIdAsync(object id)
         {
             try

@@ -35,7 +35,7 @@ namespace KarhanoMarket.Controllers
             }
             else
             {
-                int companyId = int.Parse(companyIdClaim);
+                Guid companyId = Guid.Parse(companyIdClaim);
                 var products = await _companyRepository.GetCompanyProductsAsync(companyId);
                 return View(products);
             }

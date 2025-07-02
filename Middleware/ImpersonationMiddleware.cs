@@ -22,7 +22,7 @@ namespace KarhanoMarket.Middleware
                 var isImpersonating = user.HasClaim(c => c.Type == "IsImpersonating" && c.Value == "true");
                 if (isImpersonating)
                 {
-                    var impersonatorId = user.FindFirst("ImpersonatorId")?.Value;
+                    Guid impersonatorId = Guid.Parse(user.FindFirst("ImpersonatorId")?.Value);
                     var appUser = context.Items["ApplicationUser"] as ApplicationUser;
                     if (appUser != null)
                     {
