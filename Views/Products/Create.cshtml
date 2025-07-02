@@ -9,7 +9,7 @@
 
 <h1 class="mb-4">Create Product</h1>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
     <div asp-validation-summary="All" class="text-danger mb-3"></div>
     <div class="mb-3">
@@ -30,6 +30,10 @@
             <option value="">-- Select Subcategory --</option>
         </select>
         <span asp-validation-for="SubcategoryId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="images" class="form-label">Product Images</label>
+        <input type="file" name="images" id="images" class="form-control" multiple />
     </div>
     <div class="mb-3">
         <label asp-for="Description" class="form-label">@Html.DisplayNameFor(model => model.Description)</label>

@@ -16,17 +16,20 @@ namespace KarhanoMarket.Controllers
         private readonly IGenericRepository<Product> _productRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ISubcategoryRepository _subcategoryRepository;
+        private readonly IImageRepository _imageRepository;
 
         public ProductsController(
             ICompanyRepository companyRepository,
             IGenericRepository<Product> productRepository,
             ICategoryRepository categoryRepository,
-            ISubcategoryRepository subcategoryRepository)
+            ISubcategoryRepository subcategoryRepository,
+            IImageRepository imageRepository)
         {
             _companyRepository = companyRepository;
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _subcategoryRepository = subcategoryRepository;
+            _imageRepository = imageRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -68,7 +71,7 @@ namespace KarhanoMarket.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create(Product product, List<IFormFile> images)
         {
             if (ModelState.IsValid)
             {
@@ -91,6 +94,43 @@ namespace KarhanoMarket.Controllers
 
                 await _productRepository.AddAsync(product);
                 await _productRepository.SaveChangesAsync();
+
+                // Handle image uploads
+                if (images != null && images.Count > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "products", product.Id.ToString());
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    foreach (var image in images)
+                    {
+                        if (image.Length > 0)
+                        {
+                            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+                            var filePath = Path.Combine(uploadsFolder, fileName);
+
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await image.CopyToAsync(stream);
+                            }
+
+                            var imagePath = Path.Combine("uploads", "products", product.Id.ToString(), fileName).Replace("\\", "/");
+
+                            var productImage = new Image
+                            {
+                                Id = Guid.NewGuid(),
+                                ProductId = product.Id,
+                                ImagePath = imagePath,
+                                CreatedAt = DateTime.UtcNow
+                            };
+
+                            await _imageRepository.AddAsync(productImage);
+                        }
+                    }
+                    await _imageRepository.SaveChangesAsync();
+                }
 
                 return RedirectToAction(nameof(Index));
             }

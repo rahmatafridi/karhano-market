@@ -47,6 +47,13 @@ builder.Services.AddScoped<ISubcategoryRepository>(serviceProvider =>
     return new SubcategoryRepository(context, logger);
 });
 
+builder.Services.AddScoped<IImageRepository>(serviceProvider =>
+{
+    var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+    var logger = serviceProvider.GetRequiredService<ILogger<GenericRepository<KarhanoMarket.Models.Image>>>();
+    return new ImageRepository(context, logger);
+});
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();

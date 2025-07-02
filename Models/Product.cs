@@ -30,6 +30,8 @@ namespace KarhanoMarket.Models
         public virtual Category? Category { get; set; }
         public virtual Subcategory? Subcategory { get; set; }
 
+        public virtual ICollection<Image> Images { get; set; } = new List<Image>();
+
         // Audit Properties
         public string? CreatedById { get; set; }
         public string? UpdatedById { get; set; }
