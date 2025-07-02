@@ -13,10 +13,12 @@ namespace KarhanoMarket.Controllers
     public class ProductsController : Controller
     {
         private readonly ICompanyRepository _companyRepository;
+        private readonly IGenericRepository<Product> _productRepository;
 
-        public ProductsController(ICompanyRepository companyRepository)
+        public ProductsController(ICompanyRepository companyRepository, IGenericRepository<Product> productRepository)
         {
             _companyRepository = companyRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -67,8 +69,8 @@ namespace KarhanoMarket.Controllers
                 product.CompanyId = Guid.Parse(companyIdClaim);
                 product.CreatedAt = DateTime.UtcNow;
 
-                await _companyRepository.AddAsync(product);
-                await _companyRepository.SaveChangesAsync();
+                await _productRepository.AddAsync(product);
+                await _productRepository.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
