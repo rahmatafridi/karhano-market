@@ -25,8 +25,21 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
 .AddDefaultTokenProviders();
 
 // Register repository services
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped(typeof(IGenericRepository<>), serviceProvider =>
+{
+    var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+    var loggerType = typeof(ILogger<>).MakeGenericType(typeof(GenericRepository<>));
+    var logger = serviceProvider.GetRequiredService(loggerType);
+    var genericRepoType = typeof(GenericRepository<>).MakeGenericType(typeof(object));
+    var genericRepo = Activator.CreateInstance(typeof(GenericRepository<>).MakeGenericType(typeof(object)), context, logger);
+    return genericRepo!;
+});
+builder.Services.AddScoped<ICompanyRepository>(serviceProvider =>
+{
+    var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+    var logger = serviceProvider.GetRequiredService<ILogger<GenericRepository<KarhanoMarket.Models.Company>>>();
+    return new CompanyRepository(context, logger);
+});
 
 builder.Services.AddHttpContextAccessor();
 

@@ -8,7 +8,7 @@ namespace KarhanoMarket.Repositories
     {
         private readonly ApplicationDbContext _context;
 
-        public CompanyRepository(ApplicationDbContext context) : base(context)
+        public CompanyRepository(ApplicationDbContext context, ILogger<GenericRepository<Company>> logger) : base(context, logger)
         {
             _context = context;
         }
