@@ -8,22 +8,22 @@
 
 <form asp-action="Create" method="post">
     <div class="mb-3">
-        <label asp-for="Name" class="form-label"></label>
+        <label asp-for="Name" class="form-label">@Html.DisplayNameFor(model => model.Name)</label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
+        <label asp-for="Description" class="form-label">@Html.DisplayNameFor(model => model.Description)</label>
         <textarea asp-for="Description" class="form-control"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <div class="mb-3">
-        <label asp-for="Price" class="form-label"></label>
+        <label asp-for="Price" class="form-label">@Html.DisplayNameFor(model => model.Price)</label>
         <input asp-for="Price" class="form-control" />
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
     <div class="mb-3">
-        <label asp-for="StockQuantity" class="form-label"></label>
+        <label asp-for="StockQuantity" class="form-label">@Html.DisplayNameFor(model => model.StockQuantity)</label>
         <input asp-for="StockQuantity" class="form-control" />
         <span asp-validation-for="StockQuantity" class="text-danger"></span>
     </div>
