@@ -45,6 +45,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
+
+app.UseMiddleware<KarhanoMarket.Middleware.ImpersonationMiddleware>();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
