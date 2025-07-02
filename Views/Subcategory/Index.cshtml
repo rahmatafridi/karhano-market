@@ -1,0 +1,39 @@
+@model IEnumerable<KarhanoMarket.Models.Subcategory>
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Subcategories";
+}
+
+<h1 class="mb-4">Subcategories</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary mb-3">Create New Subcategory</a>
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Is Active</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var subcategory in Model)
+{
+    <tr>
+        <td>@subcategory.Name</td>
+        <td>@subcategory.Category?.Name</td>
+        <td>@subcategory.Description</td>
+        <td>@subcategory.IsActive</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@subcategory.Id" class="btn btn-sm btn-warning">Edit</a>
+            <a asp-action="Delete" asp-route-id="@subcategory.Id" class="btn btn-sm btn-danger">Delete</a>
+        </td>
+    </tr>
+}
+    </tbody>
+</table>

@@ -14,11 +14,19 @@ namespace KarhanoMarket.Controllers
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly IGenericRepository<Product> _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly ISubcategoryRepository _subcategoryRepository;
 
-        public ProductsController(ICompanyRepository companyRepository, IGenericRepository<Product> productRepository)
+        public ProductsController(
+            ICompanyRepository companyRepository,
+            IGenericRepository<Product> productRepository,
+            ICategoryRepository categoryRepository,
+            ISubcategoryRepository subcategoryRepository)
         {
             _companyRepository = companyRepository;
             _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
+            _subcategoryRepository = subcategoryRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -46,8 +54,14 @@ namespace KarhanoMarket.Controllers
         }
 
         // GET: Products/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var categories = await _categoryRepository.GetAllAsync();
+            var subcategories = await _subcategoryRepository.GetAllAsync();
+
+            ViewBag.Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
+            ViewBag.Subcategories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(subcategories, "Id", "Name");
+
             return View();
         }
 
@@ -62,6 +76,12 @@ namespace KarhanoMarket.Controllers
                 if (string.IsNullOrEmpty(companyIdClaim))
                 {
                     ModelState.AddModelError(string.Empty, "Company ID is missing.");
+                    var categories = await _categoryRepository.GetAllAsync();
+                    var subcategories = await _subcategoryRepository.GetAllAsync();
+
+                    ViewBag.Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
+                    ViewBag.Subcategories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(subcategories, "Id", "Name");
+
                     return View(product);
                 }
 
@@ -74,6 +94,13 @@ namespace KarhanoMarket.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
+            var allCategories = await _categoryRepository.GetAllAsync();
+            var allSubcategories = await _subcategoryRepository.GetAllAsync();
+
+            ViewBag.Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(allCategories, "Id", "Name");
+            ViewBag.Subcategories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(allSubcategories, "Id", "Name");
+
             return View(product);
         }
     }

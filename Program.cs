@@ -33,6 +33,20 @@ builder.Services.AddScoped<ICompanyRepository>(serviceProvider =>
     return new CompanyRepository(context, logger);
 });
 
+builder.Services.AddScoped<ICategoryRepository>(serviceProvider =>
+{
+    var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+    var logger = serviceProvider.GetRequiredService<ILogger<GenericRepository<KarhanoMarket.Models.Category>>>();
+    return new CategoryRepository(context, logger);
+});
+
+builder.Services.AddScoped<ISubcategoryRepository>(serviceProvider =>
+{
+    var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+    var logger = serviceProvider.GetRequiredService<ILogger<GenericRepository<KarhanoMarket.Models.Subcategory>>>();
+    return new SubcategoryRepository(context, logger);
+});
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();

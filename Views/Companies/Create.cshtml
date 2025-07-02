@@ -1,3 +1,6 @@
+@{
+    Layout = "_Layout";
+}
 @model KarhanoMarket.Models.Company
 
 @{
@@ -11,12 +14,12 @@
     <div asp-validation-summary="All" class="text-danger mb-3"></div>
     <div class="mb-3">
         <label asp-for="Name" class="form-label">@Html.DisplayNameFor(model => model.Name)</label>
-        <input asp-for="Name" class="form-control" />
+        <input asp-for="Name" name="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label asp-for="Email" class="form-label">@Html.DisplayNameFor(model => model.Email)</label>
-        <input asp-for="Email" class="form-control" />
+        <input asp-for="Email" name="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
     <div class="mb-3">
