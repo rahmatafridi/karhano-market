@@ -60,10 +60,9 @@ namespace KarhanoMarket.Controllers
         public async Task<IActionResult> Create()
         {
             var categories = await _categoryRepository.GetAllAsync();
-            var subcategories = await _subcategoryRepository.GetAllAsync();
 
             ViewBag.Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
-            ViewBag.Subcategories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(subcategories, "Id", "Name");
+            ViewBag.Subcategories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(Enumerable.Empty<object>(), "Id", "Name");
 
             return View();
         }

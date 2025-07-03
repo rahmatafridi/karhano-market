@@ -98,10 +98,4 @@ namespace KarhanoMarket.Controllers
         }
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetByCategory(Guid categoryId)
-    {
-        var subcategories = await _subcategoryRepository.FindAsync(s => s.CategoryId == categoryId && s.IsActive);
-        return Json(subcategories);
-    }
 }
