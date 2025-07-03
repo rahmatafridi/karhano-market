@@ -2,6 +2,7 @@ using KarhanoMarket.Models;
 using KarhanoMarket.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Threading.Tasks;
 
@@ -28,7 +29,7 @@ namespace KarhanoMarket.Controllers
         public async Task<IActionResult> Create()
         {
             var categories = await _categoryRepository.GetAllAsync();
-            ViewBag.Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
             return View();
         }
 
