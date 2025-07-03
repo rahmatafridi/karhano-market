@@ -11,12 +11,12 @@ namespace KarhanoMarket.Controllers
     public class SubcategoryController : Controller
     {
         private readonly ISubcategoryRepository _subcategoryRepository;
-+        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
         public SubcategoryController(ISubcategoryRepository subcategoryRepository, ICategoryRepository categoryRepository)
         {
             _subcategoryRepository = subcategoryRepository;
-+            _categoryRepository = categoryRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -27,8 +27,8 @@ namespace KarhanoMarket.Controllers
 
         public async Task<IActionResult> Create()
         {
-+            var categories = await _categoryRepository.GetAllAsync();
-+            ViewBag.Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
+            var categories = await _categoryRepository.GetAllAsync();
+            ViewBag.Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
             return View();
         }
 
