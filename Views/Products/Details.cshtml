@@ -1,0 +1,59 @@
+@model KarhanoMarket.Models.Product
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Product Details";
+    var productImages = ViewBag.ProductImages as List<KarhanoMarket.Models.Image>;
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body p-4">
+                <h1 class="mb-4">Product Details</h1>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>@Model.Name</h3>
+                        <p><strong>Category:</strong> @Model.CategoryId</p>
+                        <p><strong>Subcategory:</strong> @Model.SubcategoryId</p>
+                        <p><strong>Description:</strong> @Model.Description</p>
+                        <p><strong>Price:</strong> @Model.Price.ToString("C")</p>
+                        <p><strong>Stock Quantity:</strong> @Model.StockQuantity</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Product Images</h4>
+                        @if (productImages != null && productImages.Count > 0)
+                        {
+                            <div id="productImagesCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    @for (int i = 0; i < productImages.Count; i++)
+                                    {
+                                        var image = productImages[i];
+                                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                                            <img src="~/@image.ImagePath" class="d-block w-100" alt="Product Image @(i + 1)" />
+                                        </div>
+                                    }
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#productImagesCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#productImagesCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <p>No images available for this product.</p>
+                        }
+                    </div>
+                </div>
+
+                <a asp-action="Index" class="btn btn-secondary mt-4">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

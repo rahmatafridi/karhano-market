@@ -142,5 +142,27 @@ namespace KarhanoMarket.Controllers
 
             return View(product);
         }
+
+        // GET: Products/Details/5
+        public async Task<IActionResult> Details(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _productRepository.GetByIdAsync(id.Value);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var images = await _imageRepository.GetAllAsync();
+            var productImages = images.FindAll(img => img.ProductId == product.Id);
+
+            ViewBag.ProductImages = productImages;
+
+            return View(product);
+        }
     }
 }

@@ -243,6 +243,22 @@
                 </a>
 
             </li>
+            <li>
+                <a asp-controller="Category" asp-action="Index">
+                    <div class="parent-icon">
+                        <i class="material-icons-outlined">category</i>
+                    </div>
+                    <div class="menu-title">Categories</div>
+                </a>
+            </li>
+            <li>
+                <a asp-controller="Subcategory" asp-action="Index">
+                    <div class="parent-icon">
+                        <i class="material-icons-outlined">subdirectory_arrow_right</i>
+                    </div>
+                    <div class="menu-title">Subcategories</div>
+                </a>
+            </li>
 
             @if (User.Identity.IsAuthenticated)
             {
