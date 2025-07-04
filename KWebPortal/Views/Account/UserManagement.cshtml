@@ -1,0 +1,168 @@
+@model List<BAL.Model.UserVM>
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<div class="container-fluid">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>User Management</h3>
+                <p class="text-subtitle text-muted">Manage users and impersonation</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">User Management</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Users</h4>
+            </div>
+            <div class="card-body">
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["Message"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <div class="table-responsive">
+                    <table class="table table-hover" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Store</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                <tr>
+                                    <td>@user.Name</td>
+                                    <td>@user.Email</td>
+                                    <td>
+                                        <span class="badge bg-@(user.IsSuperAdmin ? "danger" : user.IsStoreAdmin ? "primary" : "secondary")">
+                                            @user.RoleName
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(user.StoreName))
+                                        {
+                                            <span class="badge bg-info">@user.StoreName</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (user.Status)
+                                        {
+                                            <span class="badge bg-success">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Inactive</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            @if (!user.IsSuperAdmin && User.HasClaim("IsSuperAdmin", "True"))
+                                            {
+                                                <form asp-action="Impersonate" asp-route-userId="@user.Id" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-warning btn-sm" 
+                                                            data-bs-toggle="tooltip" 
+                                                            title="Impersonate User"
+                                                            onclick="return confirm('Are you sure you want to impersonate this user?')">
+                                                        <i class="bi bi-person-badge"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                            <a href="@Url.Action("Edit", new { id = user.Id })" 
+                                               class="btn btn-primary btn-sm"
+                                               data-bs-toggle="tooltip" 
+                                               title="Edit User">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            @if (!user.IsSuperAdmin)
+                                            {
+                                                <button type="button" 
+                                                        class="btn btn-danger btn-sm"
+                                                        data-bs-toggle="tooltip" 
+                                                        title="Delete User"
+                                                        onclick="confirmDelete('@user.Id', '@user.Name')">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete user <span id="deleteUserName" class="fw-bold"></span>?
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="deleteUserId" name="id" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#usersTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 25
+            });
+
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+        });
+
+        function confirmDelete(userId, userName) {
+            $('#deleteUserId').val(userId);
+            $('#deleteUserName').text(userName);
+            $('#deleteModal').modal('show');
+        }
+    </script>
+}

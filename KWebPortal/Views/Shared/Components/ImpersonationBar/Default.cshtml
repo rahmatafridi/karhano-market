@@ -1,0 +1,53 @@
+@model KWebPortal.ViewComponents.ImpersonationBarViewModel
+
+<div class="impersonation-bar">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center py-2">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-person-badge text-warning me-2"></i>
+                <span>
+                    Currently impersonating: 
+                    <strong>@Model.ImpersonatedUserName</strong> 
+                    (@Model.ImpersonatedUserEmail)
+                    @if (!string.IsNullOrEmpty(Model.StoreName))
+                    {
+                        <span class="ms-2 badge bg-info">Store: @Model.StoreName</span>
+                    }
+                </span>
+            </div>
+            <form asp-controller="Account" asp-action="StopImpersonating" method="post" class="m-0">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-warning btn-sm">
+                    <i class="bi bi-box-arrow-left me-1"></i>
+                    Stop Impersonating
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .impersonation-bar {
+        background-color: #fff3cd;
+        border-bottom: 1px solid #ffeeba;
+        color: #856404;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1050;
+    }
+
+    /* Adjust main content when impersonation bar is visible */
+    body.impersonating {
+        padding-top: 40px;
+    }
+
+    .impersonation-bar .badge {
+        font-size: 0.85em;
+    }
+</style>
+
+<script>
+    document.body.classList.add('impersonating');
+</script>
