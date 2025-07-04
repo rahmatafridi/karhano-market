@@ -2,11 +2,10 @@
 using BAL.Model;
 using DAL;
 using DAL.Enities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAL.Repo
 {
@@ -14,143 +13,202 @@ namespace BAL.Repo
     {
         private readonly KWebContext _context;
         private readonly IPasswordHash _passwordHash;
-        public UserRepo(KWebContext kWebContext,IPasswordHash passwordHash) { 
-         _context = kWebContext;    
-            _passwordHash = passwordHash;
+
+        public UserRepo(KWebContext kWebContext, IPasswordHash passwordHash)
+        {
+            _context = kWebContext ?? throw new ArgumentNullException(nameof(kWebContext));
+            _passwordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
         }
 
         public bool AddUser(UserVM model)
         {
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
             try
             {
-                var user = new User();
-                user.Status = model.Status;
-                user.Name = model.Name;
-                user.Email = model.Email;
-                user.Password = _passwordHash.HashPassword(model.Password);
-                user.Id = Guid.NewGuid();
-                user.RoleId = model.RoleId;
-                user.StoreId = model.StoreId;
-                user.CreatedDate = DateTime.Now;
-                user.CreatedBy = model.CreatedBy;
+                // Check if email already exists
+                if (_context.Users.Any(u => u.Email.ToLower() == model.Email.ToLower()))
+                {
+                    throw new InvalidOperationException("Email already exists");
+                }
+
+                var user = new User
+                {
+                    Id = Guid.NewGuid(),
+                    Status = model.Status,
+                    Name = model.Name?.Trim(),
+                    Email = model.Email?.ToLower().Trim(),
+                    Password = _passwordHash.HashPassword(model.Password),
+                    RoleId = model.RoleId,
+                    StoreId = model.StoreId,
+                    CreatedDate = DateTime.UtcNow,
+                    CreatedBy = model.CreatedBy
+                };
+
                 _context.Users.Add(user);
                 _context.SaveChanges();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw;
+                // Log exception here
+                return false;
             }
         }
 
-        public bool DeleteUser(Guid Id)
+        public bool DeleteUser(Guid id)
         {
-            var data = _context.Users.FirstOrDefault(x => x.Id == Id);
-            if (data != null)
+            if (id == Guid.Empty)
+                throw new ArgumentException("Invalid user ID", nameof(id));
+
+            try
             {
-                _context.Remove(data);
+                var user = _context.Users.Find(id);
+                if (user == null)
+                    return false;
+
+                _context.Users.Remove(user);
                 _context.SaveChanges();
                 return true;
             }
-            return false;
+            catch (Exception)
+            {
+                // Log exception here
+                return false;
+            }
         }
 
         public UserVM GetUserByEmail(string email)
         {
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("Email cannot be empty", nameof(email));
+
             try
             {
+                var user = _context.Users
+                    .AsNoTracking()
+                    .FirstOrDefault(x => x.Email.ToLower() == email.ToLower());
 
-                var data = _context.Users.FirstOrDefault(x => x.Email == email);
-                var model = new UserVM();
-                if (data != null)
+                if (user == null)
+                    return null;
+
+                return new UserVM
                 {
-                    model.Id = data.Id;
-                    model.Name = data.Name;
-                    model.Email = data.Email;
-                    model.Password = data.Password;
-                    model.Status = data.Status;
-                    model.RoleId = data.RoleId;
-                    model.StoreId = data.StoreId;
-                }
-                return model;
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    Password = user.Password,
+                    Status = user.Status,
+                    RoleId = user.RoleId,
+                    StoreId = user.StoreId
+                };
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw;
+                // Log exception here
+                return null;
             }
         }
 
-        public UserVM GetUserById(Guid Id)
+        public UserVM GetUserById(Guid id)
         {
+            if (id == Guid.Empty)
+                throw new ArgumentException("Invalid user ID", nameof(id));
+
             try
             {
-                var data = _context.Users.FirstOrDefault(x => x.Id == Id);
-                var model = new UserVM();
-                if (data != null)
-                {
-                    model.Id = data.Id;
-                    model.Name = data.Name;
-                    model.Email = data.Email;
-                    model.Password = data.Password;
-                    model.Status = data.Status;
-                    model.RoleId = data.RoleId;
-                    model.StoreId = data.StoreId;
-                }
-                return model;
-            }
-            catch (Exception ex)
-            {
+                var user = _context.Users
+                    .AsNoTracking()
+                    .FirstOrDefault(x => x.Id == id);
 
-                throw;
+                if (user == null)
+                    return null;
+
+                return new UserVM
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    Password = user.Password,
+                    Status = user.Status,
+                    RoleId = user.RoleId,
+                    StoreId = user.StoreId
+                };
+            }
+            catch (Exception)
+            {
+                // Log exception here
+                return null;
             }
         }
 
         public List<UserVM> GetUsers()
         {
-            var userlistdata = new List<UserVM>();  
-            var users = _context.Users.ToList();
-            foreach (var item in users)
-            {
-                userlistdata.Add(new UserVM()
-                {
-                    Email = item.Email,
-                    Id = item.Id,   
-                    Name = item.Name,   
-                    Password = item.Password,   
-                    RoleId = item.RoleId,
-                    Status = item.Status,   
-                   StoreId = item.StoreId
-                });
-            }
-            return userlistdata;
-        }
-
-        public bool UpdateUser(UserVM user)
-        {
             try
             {
-                var checkData = _context.Users.FirstOrDefault(x => x.Id == user.Id);
-                if (checkData != null)
-                {
-                    checkData.Email = user.Email;
-                    checkData.Status = user.Status;
-                    checkData.Name = user.Name;
-                    checkData.Password = user.Password;
-                    checkData.Id = user.Id;
-                    checkData.StoreId = user.StoreId;
-
-                    _context.Update(checkData);
-                    _context.SaveChanges();
-                    return true;
-                }
-                return false;
+                return _context.Users
+                    .AsNoTracking()
+                    .Select(user => new UserVM
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        Name = user.Name,
+                        Password = user.Password,
+                        RoleId = user.RoleId,
+                        Status = user.Status,
+                        StoreId = user.StoreId
+                    })
+                    .ToList();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                // Log exception here
+                return new List<UserVM>();
+            }
+        }
 
-                throw;
+        public bool UpdateUser(UserVM model)
+        {
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
+            if (model.Id == Guid.Empty)
+                throw new ArgumentException("Invalid user ID", nameof(model.Id));
+
+            try
+            {
+                var user = _context.Users.Find(model.Id);
+                if (user == null)
+                    return false;
+
+                // Check if email is being changed and if it already exists
+                if (user.Email != model.Email && 
+                    _context.Users.Any(u => u.Email.ToLower() == model.Email.ToLower() && u.Id != model.Id))
+                {
+                    throw new InvalidOperationException("Email already exists");
+                }
+
+                user.Email = model.Email?.ToLower().Trim();
+                user.Status = model.Status;
+                user.Name = model.Name?.Trim();
+                // Only update password if it's provided
+                if (!string.IsNullOrWhiteSpace(model.Password))
+                {
+                    user.Password = _passwordHash.HashPassword(model.Password);
+                }
+                user.StoreId = model.StoreId;
+                user.ModifiedDate = DateTime.UtcNow;
+                user.ModifiedBy = model.ModifiedBy;
+
+                _context.Update(user);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                // Log exception here
+                return false;
             }
         }
     }

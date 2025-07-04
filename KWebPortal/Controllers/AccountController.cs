@@ -3,8 +3,6 @@ using BAL.Model;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using System.Security.Claims;
 
 namespace KWebPortal.Controllers
@@ -13,55 +11,119 @@ namespace KWebPortal.Controllers
     {
         private readonly IUser _user;
         private readonly IPasswordHash _passwordHash;
-        public  AccountController(IUser user ,IPasswordHash passwordHash)
+        
+        public AccountController(IUser user, IPasswordHash passwordHash)
         {
-            _user = user;   
-            _passwordHash = passwordHash;
+            _user = user ?? throw new ArgumentNullException(nameof(user));
+            _passwordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
         }
+
+        [HttpGet]
         public IActionResult Login()
         {
+            // If user is already logged in, redirect to home
+            if (User.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
         [HttpPost]
-        public IActionResult Login(LoginVM model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginVM model)
         {
-            var user = _user.GetUserByEmail(model.Email);
-            if (user != null) {
-                bool isValid = _passwordHash.VerifyPassword(user.Password, model.Password);
-
-                if (isValid)
+            try
+            {
+                if (!ModelState.IsValid)
                 {
-                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, model.Email) }, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var principle = new ClaimsPrincipal(identity);
-                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principle);
-                    HttpContext.Session.SetString("UserName", model.Email);
-                    HttpContext.Session.SetString("name", user.Name);
-                    HttpContext.Session.SetString("RoleId", user.RoleId.ToString());
-                    return RedirectToAction("Index", "Home");
-
-
-                }
-                else
-                {
-                    TempData["errorpassword"] = "Invalid Password";
                     return View(model);
                 }
 
+                var user = _user.GetUserByEmail(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("Email", "Invalid email or password");
+                    return View(model);
                 }
 
-            return View(model);
+                if (!user.Status)
+                {
+                    ModelState.AddModelError("", "Your account is disabled. Please contact administrator.");
+                    return View(model);
+                }
+
+                bool isValid = _passwordHash.VerifyPassword(user.Password, model.Password);
+                if (!isValid)
+                {
+                    ModelState.AddModelError("Password", "Invalid email or password");
+                    return View(model);
+                }
+
+                // Create claims
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.Email),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Role, user.RoleId.ToString())
+                };
+
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    principal,
+                    new AuthenticationProperties
+                    {
+                        IsPersistent = model.RememberMe,
+                        ExpiresUtc = DateTime.UtcNow.AddHours(24)
+                    });
+
+                // Store minimal information in session
+                HttpContext.Session.SetString("UserName", user.Email);
+                HttpContext.Session.SetString("Name", user.Name);
+
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                // Log the error here
+                ModelState.AddModelError("", "An error occurred while processing your request. Please try again later.");
+                return View(model);
+            }
         }
 
-        public IActionResult Logout()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            var storedcookies = Request.Cookies.Keys;
-            foreach (var cokkie in storedcookies)
+            try
             {
-                Response.Cookies.Delete(cokkie);
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                
+                // Clear session
+                HttpContext.Session.Clear();
+                
+                // Clear authentication cookies
+                foreach (var cookie in Request.Cookies.Keys)
+                {
+                    Response.Cookies.Delete(cookie);
+                }
+
+                return RedirectToAction(nameof(Login));
             }
-            return RedirectToAction("LogIn", "Account");
+            catch (Exception ex)
+            {
+                // Log the error here
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }
