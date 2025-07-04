@@ -4,24 +4,32 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center py-2">
             <div class="d-flex align-items-center">
-                <i class="bi bi-person-badge text-warning me-2"></i>
+                <i class="bi bi-person-badge-fill text-warning me-2"></i>
                 <span>
                     Currently impersonating: 
-                    <strong>@Model.ImpersonatedUserName</strong> 
-                    (@Model.ImpersonatedUserEmail)
+                    <strong class="text-warning">@Model.ImpersonatedUserName</strong> 
+                    <span class="text-muted">(@Model.ImpersonatedUserEmail)</span>
                     @if (!string.IsNullOrEmpty(Model.StoreName))
                     {
                         <span class="ms-2 badge bg-info">Store: @Model.StoreName</span>
                     }
                 </span>
             </div>
-            <form asp-controller="Account" asp-action="StopImpersonating" method="post" class="m-0">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-warning btn-sm">
-                    <i class="bi bi-box-arrow-left me-1"></i>
-                    Stop Impersonating
-                </button>
-            </form>
+            <div class="d-flex align-items-center">
+                @if (!string.IsNullOrEmpty(Model.OriginalUserName))
+                {
+                    <small class="text-muted me-3">
+                        Original user: <strong>@Model.OriginalUserName</strong>
+                    </small>
+                }
+                <form asp-controller="Account" asp-action="StopImpersonating" method="post" class="m-0">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to stop impersonating this user?')">
+                        <i class="bi bi-box-arrow-left me-1"></i>
+                        Stop Impersonating
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -36,18 +44,37 @@
         left: 0;
         right: 0;
         z-index: 1050;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     /* Adjust main content when impersonation bar is visible */
     body.impersonating {
-        padding-top: 40px;
+        padding-top: 48px;
     }
 
     .impersonation-bar .badge {
         font-size: 0.85em;
     }
+
+    .impersonation-bar .btn-warning {
+        background-color: #f0ad4e;
+        border-color: #eea236;
+        color: #fff;
+    }
+
+    .impersonation-bar .btn-warning:hover {
+        background-color: #ec971f;
+        border-color: #d58512;
+    }
 </style>
 
 <script>
     document.body.classList.add('impersonating');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Adjust sidebar and main content padding
+        var sidebar = document.getElementById('sidebar');
+        var main = document.getElementById('main');
+        if (sidebar) sidebar.style.paddingTop = '48px';
+        if (main) main.style.paddingTop = '48px';
+    });
 </script>

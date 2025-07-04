@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace KWebPortal.ViewComponents
 {
@@ -7,19 +8,19 @@ namespace KWebPortal.ViewComponents
     {
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var isImpersonating = User.HasClaim(c => c.Type == "IsImpersonating" && c.Value == "True");
+            var claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             
-            if (!isImpersonating)
+            if (claimsPrincipal == null || !claimsPrincipal.HasClaim(c => c.Type == "IsImpersonating" && c.Value == "True"))
             {
                 return Content(string.Empty);
             }
 
             var model = new ImpersonationBarViewModel
             {
-                ImpersonatedUserName = User.FindFirstValue("Name"),
-                ImpersonatedUserEmail = User.FindFirstValue(ClaimTypes.Name),
-                OriginalUserName = User.FindFirstValue("OriginalUserName"),
-                StoreName = User.FindFirstValue("StoreName")
+                ImpersonatedUserName = claimsPrincipal.FindFirst("Name")?.Value,
+                ImpersonatedUserEmail = claimsPrincipal.FindFirst(ClaimTypes.Name)?.Value,
+                OriginalUserName = claimsPrincipal.FindFirst("OriginalUserName")?.Value,
+                StoreName = claimsPrincipal.FindFirst("StoreName")?.Value
             };
 
             return View(model);
