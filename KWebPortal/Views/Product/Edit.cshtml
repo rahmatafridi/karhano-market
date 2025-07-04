@@ -1,0 +1,118 @@
+﻿@model BAL.Model.ProductVM
+@{
+    ViewData["Title"] = "Edit";
+}
+<section id="basic-vertical-layouts">
+    <div class="row match-height">
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Edit User</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <form asp-action="Edit" asp-controller="Product">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Name</label>
+                                            <input type="text" asp-for="Name" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   placeholder="Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Cross Price</label>
+                                            <input type="text" asp-for="CrossPrice" id="first-name-vertical"
+                                                   class="form-control" name="name">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Purchase Price</label>
+                                            <input type="text" asp-for="PurchasePrice" id="first-name-vertical"
+                                                   class="form-control" name="name">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">SalePrice</label>
+                                            <input type="text" asp-for="SalePrice" id="first-name-vertical"
+                                                   class="form-control" name="name">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Categ</label>
+                                            <select class="form-control" asp-for="CategoryId">
+                                                @foreach (var x in Model.Categories)
+                                                {
+                                                    <option value="@x.Id">@x.Name</option>
+                                                }
+                                            </select>
+                                            @* 
+                                              <input type="text" asp-for="RoleId" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   placeholder="Role"> *@
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Categ</label>
+                                            <select class="form-control" asp-for="SubCategoryId">
+                                                @foreach (var x in Model.SubCategories)
+                                                {
+                                                    <option value="@x.Id">@x.Name</option>
+                                                }
+                                            </select>
+                                            @* 
+                                              <input type="text" asp-for="RoleId" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   placeholder="Role"> *@
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Categ</label>
+                                            <select class="form-control" asp-for="StoreId">
+                                                @foreach (var x in Model.Stores)
+                                                {
+                                                    <option value="@x.Id">@x.Name</option>
+                                                }
+                                            </select>
+                                            @* 
+                                              <input type="text" asp-for="RoleId" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   placeholder="Role"> *@
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class='form-check'>
+                                            <div class="checkbox">
+                                                <input type="checkbox" asp-for="Status" id="checkbox3"
+                                                       class='form-check-input' checked>
+                                                <label for="checkbox3">Status</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <button type="submit"
+                                                class="btn btn-primary me-1 mb-1">
+                                            Submit
+                                        </button>
+
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

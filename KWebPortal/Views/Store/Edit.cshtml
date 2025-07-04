@@ -1,0 +1,116 @@
+﻿@model BAL.Model.StoreModel
+@{
+    ViewData["Title"] = "Add";
+}
+<section id="basic-vertical-layouts">
+    <div class="row match-height">
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Edit Store</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <form asp-action="Edit" asp-controller="Store">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <input type="hidden" asp-for="Id" />
+                                            <label for="first-name-vertical">Name</label>
+                                            <input type="text" asp-for="Name" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   placeholder="Name">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Email</label>
+                                            <input type="text" asp-for="Email" id="first-name-vertical"
+                                                   class="form-control" name="Email"
+                                                   placeholder="Email">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Types</label>
+                                            <select class="form-control" asp-for="TypeId">
+                                                @foreach (var role in Model.StoreTypes)
+                                                {
+                                                    <option value="@role.Id">@role.Name</option>
+                                                }
+                                            </select>
+                                            @* 
+                                              <input type="text" asp-for="RoleId" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   placeholder="Role"> *@
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">ContactPerson</label>
+                                            <input type="text" asp-for="ContactPerson" id="first-name-vertical"
+                                                   class="form-control" name="ContactPerson"
+                                                   placeholder="ContactPerson">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">ContactNo</label>
+                                            <input type="text" asp-for="ContactNo" id="first-name-vertical"
+                                                   class="form-control" name="ContactNo"
+                                                   placeholder="ContactNo">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Owner Name</label>
+                                            <input type="text" asp-for="OwnerName" id="first-name-vertical"
+                                                   class="form-control" name="OwnerName"
+                                                   placeholder="OwnerName">
+                                        </div>
+                                    </div>
+                                 
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Address</label>
+                                            <input type="text" asp-for="Address" id="first-name-vertical"
+                                                   class="form-control" name="Address"
+                                                   placeholder="Address">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Description</label>
+                                            <input type="text" asp-for="Description" id="first-name-vertical"
+                                                   class="form-control" name="Description"
+                                                   placeholder="Description">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class='form-check'>
+                                            <div class="checkbox">
+                                                <input type="checkbox" asp-for="Status" id="checkbox3"
+                                                       class='form-check-input' checked>
+                                                <label for="checkbox3">Status</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <button type="submit"
+                                                class="btn btn-primary me-1 mb-1">
+                                            Submit
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

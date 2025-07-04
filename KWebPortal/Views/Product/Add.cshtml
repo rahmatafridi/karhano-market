@@ -1,0 +1,144 @@
+﻿@model BAL.Model.ProductVM
+@{
+    ViewData["Title"] = "Add";
+}
+<section id="basic-vertical-layouts">
+    <div class="row match-height">
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Add Product</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <form asp-action="Add" asp-controller="Product" method="post">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Name</label>
+                                            <input type="text" asp-for="Name" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   placeholder="Name">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Purchase Price</label>
+                                            <input type="text" asp-for="PurchasePrice" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   >
+                                        </div> 
+                                       
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">SalePrice</label>
+                                            <input type="text" asp-for="SalePrice" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   >
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Categ</label>
+                                            <select class="form-control" asp-for="CategoryId" id="CategoryId">
+                                                @foreach (var x in Model.Categories)
+                                                {
+                                                    <option value="@x.Id">@x.Name</option>
+                                                }
+                                            </select>
+                                            @* 
+                                              <input type="text" asp-for="RoleId" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   placeholder="Role"> *@
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Categ</label>
+                                            <select class="form-control" asp-for="SubCategoryId" id="SubCategoryId">
+                                               
+                                            </select>
+                                            @* 
+                                              <input type="text" asp-for="RoleId" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   placeholder="Role"> *@
+                                        </div>
+                                    </div>
+                                    <input type="file" asp-for="Images" id="imageInput" multiple accept="image/*">
+                                    <div id="preview"  style="height:30px; width=30px; overflow: auto;">
+                                        <!-- Preview content -->
+                                    </div>
+
+                                    
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <button type="submit"
+                                                class="btn btn-primary me-1 mb-1">
+                                            Submit
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+   @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#CategoryId").change(function () {
+                var id = $(this).val();
+                $("#SubCategoryId").empty().append('<option>--Select SubCategory--</option>');
+
+                $.ajax({
+                    url: '/Product/SubCategories?id=' + id,
+                    success: function (result) {
+                        $.each(result, function (i, data) {
+                            $('#SubCategoryId').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        });
+                    },
+                    error: function () {
+                        alert('Failed to load subcategories.');
+                    }
+                });
+            });
+
+            
+        });
+              
+        const imageInput = document.getElementById('imageInput');
+        const preview = document.getElementById('preview');
+
+        imageInput.addEventListener('change', function () {
+          preview.innerHTML = ''; // Clear previous previews
+
+          const files = Array.from(this.files);
+
+          files.forEach(file => {
+            if (!file.type.startsWith('image/')) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const img = document.createElement('img');
+              img.src = e.target.result;
+              preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+          });
+        });
+    
+
+    </script>
+}
+
+}
+

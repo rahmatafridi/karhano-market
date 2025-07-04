@@ -1,0 +1,25 @@
+D:\System\KWebPortal\DAL\bin\Debug\net9.0\DAL.deps.json
+D:\System\KWebPortal\DAL\bin\Debug\net9.0\DAL.dll
+D:\System\KWebPortal\DAL\bin\Debug\net9.0\DAL.pdb
+D:\System\KWebPortal\DAL\obj\Debug\net9.0\DAL.csproj.AssemblyReference.cache
+D:\System\KWebPortal\DAL\obj\Debug\net9.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\System\KWebPortal\DAL\obj\Debug\net9.0\DAL.AssemblyInfoInputs.cache
+D:\System\KWebPortal\DAL\obj\Debug\net9.0\DAL.AssemblyInfo.cs
+D:\System\KWebPortal\DAL\obj\Debug\net9.0\DAL.csproj.CoreCompileInputs.cache
+D:\System\KWebPortal\DAL\obj\Debug\net9.0\DAL.dll
+D:\System\KWebPortal\DAL\obj\Debug\net9.0\refint\DAL.dll
+D:\System\KWebPortal\DAL\obj\Debug\net9.0\DAL.pdb
+D:\System\KWebPortal\DAL\obj\Debug\net9.0\ref\DAL.dll
+D:\System\Advance KWebPortal\KWebPortal\DAL\bin\Debug\net9.0\DAL.deps.json
+D:\System\Advance KWebPortal\KWebPortal\DAL\bin\Debug\net9.0\DAL.dll
+D:\System\Advance KWebPortal\KWebPortal\DAL\bin\Debug\net9.0\DAL.pdb
+D:\System\Advance KWebPortal\KWebPortal\DAL\obj\Debug\net9.0\DAL.csproj.AssemblyReference.cache
+D:\System\Advance KWebPortal\KWebPortal\DAL\obj\Debug\net9.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\System\Advance KWebPortal\KWebPortal\DAL\obj\Debug\net9.0\DAL.AssemblyInfoInputs.cache
+D:\System\Advance KWebPortal\KWebPortal\DAL\obj\Debug\net9.0\DAL.AssemblyInfo.cs
+D:\System\Advance KWebPortal\KWebPortal\DAL\obj\Debug\net9.0\DAL.csproj.CoreCompileInputs.cache
+D:\System\Advance KWebPortal\KWebPortal\DAL\obj\Debug\net9.0\DAL.sourcelink.json
+D:\System\Advance KWebPortal\KWebPortal\DAL\obj\Debug\net9.0\DAL.dll
+D:\System\Advance KWebPortal\KWebPortal\DAL\obj\Debug\net9.0\refint\DAL.dll
+D:\System\Advance KWebPortal\KWebPortal\DAL\obj\Debug\net9.0\DAL.pdb
+D:\System\Advance KWebPortal\KWebPortal\DAL\obj\Debug\net9.0\ref\DAL.dll

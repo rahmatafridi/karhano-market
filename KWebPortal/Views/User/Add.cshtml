@@ -1,0 +1,82 @@
+﻿@model BAL.Model.UserVM
+@{
+    ViewData["Title"] = "Add";
+}
+<section id="basic-vertical-layouts">
+    <div class="row match-height">
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Add User</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <form asp-action="Add" asp-controller="User">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Name</label>
+                                            <input type="text" asp-for="Name" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   placeholder="Name">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Email</label>
+                                            <input type="text" asp-for="Email" id="first-name-vertical"
+                                                   class="form-control" name="Email"
+                                                   placeholder="Email">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Role</label>
+                                            <select class="form-control" asp-for="RoleId">
+                                                @foreach (var role in Model.Roles)
+                                                {
+                                                    <option value="@role.Id">@role.Name</option>
+                                                }
+                                            </select>
+@* 
+                                              <input type="text" asp-for="RoleId" id="first-name-vertical"
+                                                   class="form-control" name="name"
+                                                   placeholder="Role"> *@
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="first-name-vertical">Password</label>
+                                            <input type="password" asp-for="Password" id="first-name-vertical"
+                                                   class="form-control" name="Password"
+                                                   placeholder="Password">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class='form-check'>
+                                            <div class="checkbox">
+                                                <input type="checkbox" asp-for="Status" id="checkbox3"
+                                                       class='form-check-input' checked>
+                                                <label for="checkbox3">Status</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <button type="submit"
+                                                class="btn btn-primary me-1 mb-1">
+                                            Submit
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
