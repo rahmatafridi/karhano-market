@@ -7,8 +7,9 @@ using Microsoft.CodeAnalysis;
 
 namespace KWebPortal.Controllers
 {
-    public class ProductController : Controller
-    {
+[Authorize(Roles = "SuperAdmin,StoreAdmin")]
+public class ProductController : Controller
+{
         protected KWebContext _context;
         protected IProduct _product;
         protected ICategory _category;
@@ -74,10 +75,17 @@ namespace KWebPortal.Controllers
         [HttpPost]
         public IActionResult Add(ProductVM model)
         {
-
             var storeId = HttpContext.Session.GetString("StoreId");
             model.StoreId = Guid.Parse(storeId);
             model.Status = true;
+
+            // Set CreatedBy from current user claims
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim != null && Guid.TryParse(userIdClaim.Value, out Guid userId))
+            {
+                model.CreatedBy = userId;
+            }
+
             var productId = _product.AddProduct(model);
 
             var images = new List<ProductImageVM>();

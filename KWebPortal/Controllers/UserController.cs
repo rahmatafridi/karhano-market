@@ -7,9 +7,9 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace KWebPortal.Controllers
 {
-    //[Authorize]
-    public class UserController : Controller
-    {
+[Authorize(Roles = "SuperAdmin,StoreAdmin")]
+public class UserController : Controller
+{
         private readonly IUser _user;
         private readonly IRole _role;
         public UserController(IUser user, IRole role) { 

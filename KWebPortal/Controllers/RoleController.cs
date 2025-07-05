@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KWebPortal.Controllers
 {
-    //[Authorize]
-
-    public class RoleController : Controller
-    {
+[Authorize(Roles = "SuperAdmin")]
+public class RoleController : Controller
+{
 
         private readonly IRole _role;
         public RoleController(IRole role) { 

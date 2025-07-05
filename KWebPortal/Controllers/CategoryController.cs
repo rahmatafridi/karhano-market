@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KWebPortal.Controllers
 {
-    public class CategoryController : Controller
-    {
+[Authorize(Roles = "SuperAdmin,StoreAdmin")]
+public class CategoryController : Controller
+{
         protected readonly KWebContext _context;
         private readonly ICategory _category;
 

@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KWebPortal.Controllers
 {
-    public class StoreTypeController : Controller
-    {
+[Authorize(Roles = "SuperAdmin,StoreAdmin")]
+public class StoreTypeController : Controller
+{
         private readonly IStoreType _storeType;
         public StoreTypeController(IStoreType storeType) { 
        _storeType = storeType;  

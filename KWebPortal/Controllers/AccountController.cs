@@ -108,7 +108,7 @@ namespace KWebPortal.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Impersonate(Guid userId)
@@ -169,7 +169,7 @@ namespace KWebPortal.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> StopImpersonating()
@@ -223,32 +223,32 @@ namespace KWebPortal.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
-        {
-            try
-            {
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                
-                // Clear session
-                HttpContext.Session.Clear();
-                
-                // Clear authentication cookies
-                foreach (var cookie in Request.Cookies.Keys)
-                {
-                    Response.Cookies.Delete(cookie);
-                }
+      [Authorize(Roles = "SuperAdmin,StoreAdmin,User")]
+      [HttpPost]
+      [ValidateAntiForgeryToken]
+      public async Task<IActionResult> Logout()
+      {
+          try
+          {
+              await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+              
+              // Clear session
+              HttpContext.Session.Clear();
+              
+              // Clear authentication cookies
+              foreach (var cookie in Request.Cookies.Keys)
+              {
+                  Response.Cookies.Delete(cookie);
+              }
 
-                return RedirectToAction(nameof(Login));
-            }
-            catch (Exception ex)
-            {
-                // Log error here
-                return RedirectToAction("Index", "Home");
-            }
-        }
+              return RedirectToAction(nameof(Login));
+          }
+          catch (Exception ex)
+          {
+              // Log error here
+              return RedirectToAction("Index", "Home");
+          }
+      }
 
         [HttpGet]
         public IActionResult AccessDenied()

@@ -6,8 +6,9 @@ using System.Data;
 
 namespace KWebPortal.Controllers
 {
-    public class SubCategoryController : Controller
-    {
+[Authorize(Roles = "SuperAdmin,StoreAdmin")]
+public class SubCategoryController : Controller
+{
         private ISubCategory _subcategory;
         private ICategory _category;
         public SubCategoryController(ISubCategory subcategory,ICategory category)

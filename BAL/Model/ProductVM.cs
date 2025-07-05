@@ -28,16 +28,13 @@ namespace BAL.Model
 
         public Guid StoreId { get; set; }
 
-        
-
+        public Guid CreatedBy { get; set; }
 
         public string Store { get; set; }
 
         public string Category { get; set; }
 
         public string SubCategory { get; set; }
-
-
 
         public List<StoreModel> Stores { get; set; }
         public List<CategoryVM> Categories { get; set; }
