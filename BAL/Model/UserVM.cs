@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BAL.Model
@@ -101,5 +102,9 @@ namespace BAL.Model
         }
 
         public bool IsImpersonated => ImpersonatedByUserId.HasValue;
+
+        // For dropdown lists in views
+        public List<RoleVM> Roles { get; set; } = new List<RoleVM>();
+        public List<StoreModel> Stores { get; set; } = new List<StoreModel>();
     }
 }
