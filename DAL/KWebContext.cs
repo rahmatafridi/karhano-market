@@ -1,4 +1,5 @@
 ﻿using DAL.Enities;
+using DAL.SeedData;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL
@@ -140,6 +141,9 @@ namespace DAL
                     .HasForeignKey(e => e.CategoryId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
+
+            // Seed initial data
+            DbSeeder.SeedData(modelBuilder);
         }
     }
 }
