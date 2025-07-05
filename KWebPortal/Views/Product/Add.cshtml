@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-content">
                     <div class="card-body">
-                        <form asp-action="Add" asp-controller="Product" method="post">
+                        <form asp-action="Add" asp-controller="Product" method="post" enctype="multipart/form-data">
                             <div class="form-body">
                                 <div class="row">
                                     <div class="col-12">
@@ -27,8 +27,7 @@
                                         <div class="form-group">
                                             <label for="first-name-vertical">Purchase Price</label>
                                             <input type="text" asp-for="PurchasePrice" id="first-name-vertical"
-                                                   class="form-control" name="name"
-                                                   >
+                                                   class="form-control" name="PurchasePrice">
                                         </div> 
                                        
                                     </div>
@@ -36,15 +35,14 @@
                                         <div class="form-group">
                                             <label for="first-name-vertical">SalePrice</label>
                                             <input type="text" asp-for="SalePrice" id="first-name-vertical"
-                                                   class="form-control" name="name"
-                                                   >
+                                                   class="form-control" name="SalePrice">
                                         </div>
                                     </div>
                                     
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label for="first-name-vertical">Category</label>
-                                            <select class="form-control" asp-for="CategoryId" id="CategoryId">
+                                            <select class="form-control" asp-for="CategoryId" name="CategoryId" id="CategoryId">
                                                 @foreach (var x in Model.Categories)
                                                 {
                                                     <option value="@x.Id">@x.Name</option>
