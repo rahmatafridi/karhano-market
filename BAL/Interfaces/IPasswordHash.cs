@@ -1,4 +1,4 @@
-﻿namespace BAL.Interfaces
+﻿﻿namespace BAL.Interfaces
 {
     public interface IPasswordHash
     {
