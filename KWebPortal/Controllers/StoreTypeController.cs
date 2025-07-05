@@ -1,5 +1,6 @@
 ﻿using BAL.Interfaces;
 using BAL.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KWebPortal.Controllers

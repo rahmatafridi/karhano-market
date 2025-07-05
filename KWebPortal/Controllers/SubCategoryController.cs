@@ -1,6 +1,7 @@
 ﻿using BAL.Interfaces;
 using BAL.Model;
 using DAL.Enities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 
