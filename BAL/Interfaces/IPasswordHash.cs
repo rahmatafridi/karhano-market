@@ -21,13 +21,6 @@
         bool VerifyPassword(string hashedPassword, string providedPassword);
 
         /// <summary>
-        /// Checks if a password hash needs to be upgraded (e.g., if work factor has changed)
-        /// </summary>
-        /// <param name="hashedPassword">The stored hash to check</param>
-        /// <returns>True if the hash should be upgraded, false otherwise</returns>
-        bool NeedsRehash(string hashedPassword);
-
-        /// <summary>
         /// Generates a cryptographically secure random password
         /// </summary>
         /// <param name="length">The desired length of the password</param>

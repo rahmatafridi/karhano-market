@@ -1,6 +1,5 @@
 ﻿﻿using BAL.Interfaces;
 using System;
-using System.Security.Cryptography;
 
 namespace BAL.Repo
 {
@@ -48,32 +47,19 @@ namespace BAL.Repo
         }
 
         /// <summary>
-        /// Checks if a password needs to be rehashed (e.g., if work factor has changed)
-        /// </summary>
-        public bool NeedsRehash(string hashedPassword)
-        {
-            try
-            {
-                return BCrypt.Net.BCrypt.GetWorkFactor(hashedPassword) < WORK_FACTOR;
-            }
-            catch
-            {
-                // If we can't determine the work factor, assume it needs rehashing
-                return true;
-            }
-        }
-
-        /// <summary>
         /// Generates a cryptographically secure random password
         /// </summary>
         public string GenerateSecurePassword(int length = 16)
         {
             const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+-=[]{}|;:,.<>?";
-            using var rng = new RNGCryptoServiceProvider();
             var bytes = new byte[length];
-            var chars = new char[length];
+            
+            using (var rng = System.Security.Cryptography.RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(bytes);
+            }
 
-            rng.GetBytes(bytes);
+            var chars = new char[length];
             for (int i = 0; i < length; i++)
             {
                 chars[i] = validChars[bytes[i] % validChars.Length];
