@@ -43,7 +43,9 @@ namespace BAL.Repo
                     RoleId = model.RoleId,
                     StoreId = model.StoreId,
                     CreatedDate = DateTime.UtcNow,
-                    CreatedBy = model.CreatedBy
+                    CreatedBy = "",
+                    LastLoginIP ="",
+                    ModifiedBy=""
                 };
 
                 _context.Users.Add(user);
@@ -93,6 +95,18 @@ namespace BAL.Repo
                 if (user == null)
                     return null;
 
+                bool isSupperAdmin = false;
+                bool isStoreAdmin = false;
+                var role = _context.Roles.Where(x => x.Id == user.RoleId).FirstOrDefault();
+
+                if(role.Name == "StoreAdmin")
+                {
+                    isStoreAdmin = true;
+                }
+                if(role.Name == "SuperAdmin")
+                {
+                    isSupperAdmin = true;
+                }
                 return new UserVM
                 {
                     Id = user.Id,
@@ -101,7 +115,10 @@ namespace BAL.Repo
                     Password = user.Password,
                     Status = user.Status,
                     RoleId = user.RoleId,
-                    StoreId = user.StoreId
+                    StoreId = user.StoreId,
+                    IsSuperAdmin = isSupperAdmin,
+                    IsStoreAdmin = isStoreAdmin,
+                    RoleName = role.Name
                 };
             }
             catch (Exception)

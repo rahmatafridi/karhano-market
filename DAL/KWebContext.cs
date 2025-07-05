@@ -51,9 +51,9 @@ namespace DAL
 
                 // User - Impersonation relationship (self-referencing)
                 entity.HasOne(e => e.ImpersonatedByUser)
-                    .WithMany(e => e.ImpersonatedUsers)
-                    .HasForeignKey(e => e.ImpersonatedByUserId)
-                    .OnDelete(DeleteBehavior.SetNull);
+     .WithMany()
+     .HasForeignKey(e => e.ImpersonatedByUserId)
+     .OnDelete(DeleteBehavior.NoAction); // ✅ Fixes multiple cascade path issue
 
                 // Audit fields
                 entity.Property(e => e.CreatedDate)
@@ -87,60 +87,13 @@ namespace DAL
             });
 
             // Store configuration
-            modelBuilder.Entity<Store>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100);
+          
 
-                entity.HasOne(e => e.StoreType)
-                    .WithMany()
-                    .HasForeignKey(e => e.StoreTypeId)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
+          
 
-            // Product configuration
-            modelBuilder.Entity<Product>(entity =>
-            {
-                entity.HasKey(e => e.Id);
+          
 
-                entity.HasOne(e => e.Store)
-                    .WithMany()
-                    .HasForeignKey(e => e.StoreId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(e => e.SubCategory)
-                    .WithMany()
-                    .HasForeignKey(e => e.SubCategoryId)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
-
-            // Category configuration
-            modelBuilder.Entity<Category>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100);
-            });
-
-            // SubCategory configuration
-            modelBuilder.Entity<SubCategory>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.HasOne(e => e.Category)
-                    .WithMany()
-                    .HasForeignKey(e => e.CategoryId)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
+          
 
             // Seed initial data
             DbSeeder.SeedData(modelBuilder);

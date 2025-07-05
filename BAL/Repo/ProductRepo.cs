@@ -85,10 +85,10 @@ namespace BAL.Repo
             };
         }
 
-        public List<ProductVM> GetProducts()
+        public List<ProductVM> GetProducts(Guid id)
         {
             var model = new List<ProductVM>();
-            var products = _context.Products.ToList();
+            var products = _context.Products.Where(x=>x.StoreId ==id).ToList();
 
             foreach (var item in products)
             {

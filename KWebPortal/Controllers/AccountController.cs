@@ -95,6 +95,7 @@ namespace KWebPortal.Controllers
                 // Store minimal information in session
                 HttpContext.Session.SetString("UserName", user.Email);
                 HttpContext.Session.SetString("Name", user.Name);
+                HttpContext.Session.SetString("StoreId", user.StoreId.ToString());
                 HttpContext.Session.SetString("IsSuperAdmin", user.IsSuperAdmin.ToString());
 
                 return RedirectToAction("Index", "Home");
@@ -130,7 +131,7 @@ namespace KWebPortal.Controllers
 
                 // Store original user info for reverting impersonation
                 targetUser.ImpersonatedByUserId = currentUserId;
-                targetUser.OriginalUserId = currentUserId;
+                targetUser.StoreId = currentUserId;
 
                 // Create claims for impersonated user
                 var claims = new List<Claim>
@@ -140,7 +141,7 @@ namespace KWebPortal.Controllers
                     new Claim(ClaimTypes.Role, targetUser.RoleName),
                     new Claim("Name", targetUser.Name),
                     new Claim("IsImpersonating", "True"),
-                    new Claim("OriginalUserId", currentUserId.ToString()),
+                    new Claim("StoreUserId", currentUserId.ToString()),
                     new Claim("IsSuperAdmin", targetUser.IsSuperAdmin.ToString()),
                     new Claim("IsStoreAdmin", targetUser.IsStoreAdmin.ToString())
                 };

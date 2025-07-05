@@ -27,7 +27,9 @@ namespace KWebPortal.Controllers
 
         public IActionResult List()
         {
-            var data = _product.GetProducts();
+            var storeId = HttpContext.Session.GetString("StoreId");
+
+            var data = _product.GetProducts(Guid.Parse(storeId));
             return View(data);
         }
 
@@ -72,7 +74,10 @@ namespace KWebPortal.Controllers
         [HttpPost]
         public IActionResult Add(ProductVM model)
         {
-           
+
+            var storeId = HttpContext.Session.GetString("StoreId");
+            model.StoreId = Guid.Parse(storeId);
+            model.Status = true;
             var productId = _product.AddProduct(model);
 
             var images = new List<ProductImageVM>();

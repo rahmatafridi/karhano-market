@@ -42,15 +42,27 @@
                         @if (User.HasClaim("IsSuperAdmin", "True"))
                         {
                             <li class="sidebar-item">
-                                <a href="@Url.Action("UserManagement", "Account")" class="sidebar-link">
+                                <a href="@Url.Action("List", "User")" class="sidebar-link">
                                     <i class="bi bi-people-fill"></i>
                                     <span>User Management</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="@Url.Action("Index", "Store")" class="sidebar-link">
+                                <a href="@Url.Action("List", "Store")" class="sidebar-link">
                                     <i class="bi bi-shop"></i>
                                     <span>Stores</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                        <a href="@Url.Action("List", "Category")">
+                                    <i class="bi bi-shop"></i>
+                                    <span>  Categories</span>
+                                        </a>
+                                    </li>
+                            <li class="sidebar-item">
+                                <a href="@Url.Action("List", "SubCategory")">
+                                    <i class="bi bi-shop"></i>
+                                    <span> Sub Categories</span>
                                 </a>
                             </li>
                         }
@@ -64,11 +76,9 @@
                                 </a>
                                 <ul class="submenu">
                                     <li class="submenu-item">
-                                        <a href="@Url.Action("Index", "Product")">Product List</a>
+                                        <a href="@Url.Action("List", "Product")">Product List</a>
                                     </li>
-                                    <li class="submenu-item">
-                                        <a href="@Url.Action("Categories", "Product")">Categories</a>
-                                    </li>
+                                   
                                 </ul>
                             </li>
                         }

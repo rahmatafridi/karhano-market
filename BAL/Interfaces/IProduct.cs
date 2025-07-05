@@ -10,7 +10,7 @@ namespace BAL.Interfaces
 {
    public interface IProduct
     {
-        List<ProductVM> GetProducts();
+        List<ProductVM> GetProducts(Guid id);
 
         public List<ProductImageVM> GetImagesByProdutId(Guid Id);
 

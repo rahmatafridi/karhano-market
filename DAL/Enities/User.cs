@@ -12,7 +12,7 @@ namespace DAL.Enities
         public bool Status { get; set; }
         public Guid RoleId { get; set; }
         public virtual Role Role { get; set; }
-        
+
         // Store relationship
         public Guid? StoreId { get; set; }
         public virtual Store Store { get; set; }
@@ -31,4 +31,5 @@ namespace DAL.Enities
         public string LastLoginIP { get; set; }
 
         // Navigation properties
-        public virtual ICollection<User> ImpersonatedUsers { get; set; }
+    }
+}
